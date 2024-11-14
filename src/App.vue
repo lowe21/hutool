@@ -1,53 +1,47 @@
 <script setup lang="ts">
-import {reactive, onMounted, onUnmounted} from 'vue'
-import G2Chart from '@/components/G2Chart.vue'
-
-let timer:number
-let data = reactive([{
-  value: 0,
-  timestamp: 0
-}])
-
-onMounted(() => {
-  timer = setInterval(() => {
-    data = Object.assign([{
-      value: Math.random() * (1000 - 0) + 1000,
-      timestamp: Date.now()
-    }])
-  }, 1000)
-})
-
-onUnmounted(() => {
-  clearInterval(timer)
-})
+import HelloWorld from './components/HelloWorld.vue'
+import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
-  <el-container>
-    <el-main>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-      <G2Chart :data="data"/>
-    </el-main>
-    <el-aside></el-aside>
-  </el-container>
+  <header>
+    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
+    </div>
+  </header>
+
+  <main>
+    <TheWelcome />
+  </main>
 </template>
 
 <style scoped>
-.el-container {
-  height: 100vh;
+header {
   line-height: 1.5;
-}
-
-.el-main {
-  background-color: green;
-}
-
-.el-aside {
-  background-color: purple;
 }
 
 .logo {
   display: block;
   margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
 }
 </style>
