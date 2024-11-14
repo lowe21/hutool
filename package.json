@@ -12,6 +12,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@antv/g2": "^5.2.7",
     "element-plus": "^2.8.7",
     "vue": "^3.5.12"
   },
