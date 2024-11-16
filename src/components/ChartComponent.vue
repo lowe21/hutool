@@ -30,7 +30,6 @@ onMounted(() => {
 })
 
 Emitter.on('change-data', (data) => {
-  console.log(data)
   line.changeData(data)
 })
 
