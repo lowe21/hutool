@@ -27,7 +27,8 @@ chart
   .encode('x', 'x')
   .encode('y', 'y')
   .encode('shape', 'smooth')
-  .scale('y', { nice: true })
+  .scale('x', { type: 'linear', domain: [0, 9], tickMethod: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] })
+  .scale('y', { type: 'linear', domain: [0, 100], tickMethod: () => [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] })
   .animate('enter', { type: 'pathIn', duration: 1000 })
 
 onMounted(() => {
