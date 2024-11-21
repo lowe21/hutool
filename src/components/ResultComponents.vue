@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
+import { type HandlerResult } from '@/types/Websocket'
 import Emitter from '@/utils/Emitter'
 
 const result = ref(0)
@@ -16,8 +17,8 @@ const notPass = computed(() => {
   return result.value == -1
 })
 
-Emitter.on('change-result', (data:any) => {
-  result.value = data
+Emitter.on('change-result', (data: HandlerResult) => {
+  result.value = data.result
 })
 
 onUnmounted(() => {
@@ -35,7 +36,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-  .el-card {
-    height: 400px;
-  }
+.el-card {
+  height: 400px;
+}
 </style>

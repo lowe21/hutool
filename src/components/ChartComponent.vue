@@ -1,22 +1,31 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
-import Emitter from '@/utils/Emitter'
 import { Chart } from '@antv/g2'
+import { type HandlerDataArray } from '@/types/Websocket'
+import Emitter from '@/utils/Emitter'
 
 const chart = new Chart({
   autoFit: true,
   height: 400,
 })
 
-const line = chart.data({
-  type: 'fetch',
-  value: 'https://assets.antv.antgroup.com/g2/doughnut-purchases.json',
-});
+const line = chart.data([
+  {x: 0, y: 65},
+  {x: 1, y: 40},
+  {x: 2, y: 95},
+  {x: 3, y: 60},
+  {x: 4, y: 80},
+  {x: 5, y: 55},
+  {x: 6, y: 70},
+  {x: 7, y: 29},
+  {x: 8, y: 40},
+  {x: 9, y: 85},
+]);
 
 chart
   .line()
-  .encode('x', 'year')
-  .encode('y', 'count')
+  .encode('x', 'x')
+  .encode('y', 'y')
   .encode('shape', 'smooth')
   .scale('y', { nice: true })
   .animate('enter', { type: 'pathIn', duration: 1000 })
@@ -29,7 +38,7 @@ onMounted(() => {
   }
 })
 
-Emitter.on('change-data', (data) => {
+Emitter.on('change-data', (data: HandlerDataArray) => {
   line.changeData(data)
 })
 

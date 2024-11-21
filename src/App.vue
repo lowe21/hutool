@@ -1,28 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import Emitter from '@/utils/Emitter'
+import connection from '@/utils/Websocket'
 import ChartComponent from '@/components/ChartComponent.vue'
 import ResultComponents from "@/components/ResultComponents.vue";
 
 onMounted(() => {
-  setInterval(() => {
-    const data = []
-    for (let i = 1996; i <= 2024; i++) {
-      data.push({
-        year: i,
-        count: Math.floor(Math.random() * 10000),
-      })
-    }
-    Emitter.emit('change-data', data)
-
-    let result = Math.random() * 2
-    if (result > 1) {
-      result = -1
-    } else {
-      result = Math.round(result)
-    }
-    Emitter.emit('change-result', result)
-  }, 1000)
+  connection()
 })
 </script>
 

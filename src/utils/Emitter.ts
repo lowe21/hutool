@@ -1,3 +1,9 @@
 import mitt from 'mitt'
+import { type HandlerDataArray, type HandlerResult } from '@/types/Websocket'
 
-export default mitt()
+type Events = {
+  'change-data': HandlerDataArray,
+  'change-result': HandlerResult,
+}
+
+export default mitt<Events>()
