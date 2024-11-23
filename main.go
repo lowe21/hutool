@@ -13,6 +13,7 @@ import (
 	_ "hutool/internal/logic"
 )
 
+//go:embed all:frontend/dist
 var assets embed.FS
 
 func main() {
