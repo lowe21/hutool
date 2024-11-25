@@ -26,7 +26,7 @@ func (*Server) GetAddress() string {
 	return address
 }
 
-func (*Server) Run() {
+func (*Server) run() {
 	go func() {
 		for {
 			<-time.After(time.Second)

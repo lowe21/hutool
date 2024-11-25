@@ -6,12 +6,14 @@ require (
 	github.com/gogf/gf/v2 v2.8.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/wailsapp/wails/v2 v2.9.2
+	go.bug.st/serial v1.6.2
 )
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
+	github.com/creack/goselect v0.1.2 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

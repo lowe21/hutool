@@ -15,6 +15,7 @@ import (
 var (
 	//go:embed all:frontend/dist
 	assets embed.FS
+	device = &Device{}
 	server = &Server{}
 )
 
@@ -27,7 +28,8 @@ func main() {
 			Assets: assets,
 		},
 		OnStartup: func(ctx context.Context) {
-			server.Run()
+			go device.listener()
+			go server.run()
 		},
 		Bind: []any{
 			server,
