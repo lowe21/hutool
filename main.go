@@ -8,24 +8,29 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 
-	"hutool/internal/cmd"
 	_ "hutool/internal/imports"
 	_ "hutool/internal/logic"
 )
 
-//go:embed all:frontend/dist
-var assets embed.FS
+var (
+	//go:embed all:frontend/dist
+	assets embed.FS
+	server = &Server{}
+)
 
 func main() {
 	if err := wails.Run(&options.App{
-		Title:  "hutool",
+		Title:  server.GetName(),
 		Width:  1280,
 		Height: 960,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		OnStartup: func(ctx context.Context) {
-			cmd.Main.Run(ctx)
+			server.Run()
+		},
+		Bind: []any{
+			server,
 		},
 	}); err != nil {
 		panic(err)
