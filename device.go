@@ -1,30 +1,36 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"time"
 
-	"go.bug.st/serial/enumerator"
+	"go.bug.st/serial"
+
+	"hutool/internal/pkg/websocket"
 )
 
 type Device struct{}
 
-func (*Device) listener() {
-	ports, err := enumerator.GetDetailedPortsList()
+func (device *Device) listener() {
+	port, err := serial.Open("", &serial.Mode{
+		BaudRate: 115200,
+	})
 	if err != nil {
-		log.Fatal(err)
-	}
-	if len(ports) == 0 {
-		return
-	}
-	for _, port := range ports {
-		fmt.Printf("Port: %s\n", port.Name)
-		if port.Product != "" {
-			fmt.Printf("   Product Name: %s\n", port.Product)
-		}
-		if port.IsUSB {
-			fmt.Printf("   USB ID      : %s:%s\n", port.VID, port.PID)
-			fmt.Printf("   USB serial  : %s\n", port.SerialNumber)
+		websocket.Notice(websocket.Message("error", "DEVICE_ERROR", err.Error()))
+	} else {
+		for {
+			data := make([]byte, 128)
+			n, err := port.Read(data)
+			if err != nil {
+				websocket.Notice(websocket.Message("error", "DEVICE_ERROR", err.Error()))
+				break
+			}
+			log.Printf("%v", data[:n])
+			log.Printf("%s", data[:n])
 		}
 	}
+
+	<-time.After(3 * time.Second)
+
+	device.listener()
 }
