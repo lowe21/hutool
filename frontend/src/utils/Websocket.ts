@@ -1,5 +1,5 @@
 import { type Result, type HandlerResult, type HandlerDataArray } from '@/types/Websocket';
-import { GetAddress } from '@/../wailsjs/go/main/Server'
+import { GetAddress } from '@/wailsjs/go/main/Server'
 import Emitter from '@/utils/Emitter';
 
 const connection = () => {
