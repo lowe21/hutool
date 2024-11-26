@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"time"
 
 	"go.bug.st/serial"
@@ -12,7 +12,8 @@ import (
 type Device struct{}
 
 func (device *Device) listener() {
-	port, err := serial.Open("", &serial.Mode{
+	// VID:PID 1A86:7523
+	port, err := serial.Open("/dev/cu.usbserial-1460", &serial.Mode{
 		BaudRate: 115200,
 	})
 	if err != nil {
@@ -25,8 +26,8 @@ func (device *Device) listener() {
 				websocket.Notice(websocket.Message("error", "DEVICE_ERROR", err.Error()))
 				break
 			}
-			log.Printf("%v", data[:n])
-			log.Printf("%s", data[:n])
+			fmt.Printf("%X\n", data[:n])
+			fmt.Printf("%v\n", data[:n])
 		}
 	}
 
