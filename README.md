@@ -2,7 +2,9 @@
 
 ## About
 
-This is the official Wails Vue-TS template.
+The project is developed based on Vue3、GoFrame and Wails2.
+
+GoFrame doc: https://goframe.org/docs
 
 You can configure the project by editing `wails.json`. More information about the project settings can be found
 here: https://wails.io/docs/reference/project-config
