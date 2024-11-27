@@ -1,6 +1,7 @@
-import { type Result, type HandlerResult, type HandlerDataArray } from '@/types/Websocket';
+import { type Result, type HandlerResult, type HandlerDataArray } from '@/types/Websocket'
 import { GetAddress } from '@/wailsjs/go/main/Server'
-import Emitter from '@/utils/Emitter';
+import Emitter from '@/utils/Emitter'
+import { ElNotification } from 'element-plus'
 
 const connection = () => {
   GetAddress().then((address) => {
@@ -27,7 +28,11 @@ const connection = () => {
               break
           }
         } else {
-          console.error(result.message)
+          ElNotification({
+            type: 'error',
+            title: result.code,
+            message: result.message,
+          })
         }
       } catch (e) {
         console.error((e as Error).message)

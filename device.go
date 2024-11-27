@@ -6,6 +6,8 @@ import (
 
 	"go.bug.st/serial"
 
+	"github.com/gogf/gf/v2/text/gstr"
+
 	"hutool/internal/pkg/websocket"
 )
 
@@ -29,43 +31,54 @@ func (device *Device) listener() {
 				websocket.Notice(websocket.Message("error", "DEVICE_ERROR", err.Error()))
 				break
 			}
-			if n != 14 {
+
+			buffer = device.parse(buffer[:n])
+			if len(buffer) == 0 {
 				continue
 			}
 
-			var (
-				header string
-				footer string
-			)
-			for _, value := range data[:2] {
-				header += fmt.Sprintf("%X", value)
-			}
-			for _, value := range data[n-2:] {
-				footer += fmt.Sprintf("%X", value)
-			}
-			if header != "FF81" || footer != "CC5A" {
-				continue
-			}
-
-			for index, value := range buffer[2 : n-2] {
+			for index, value := range buffer {
 				data = append(data, map[string]any{
-					"line": index,
+					"line": gstr.JoinAny([]any{"line", index}, ""),
 					"x":    count,
 					"y":    value,
 				})
 			}
 
-			count++
-
-			if count >= 10 {
-				websocket.Notice(websocket.Message("error", data))
+			if count++; count > 10 {
+				websocket.Notice(websocket.Message("data", data))
 				count = 0
 				data = data[:0]
 			}
 		}
 	}
 
-	<-time.After(3 * time.Second)
+	<-time.After(5 * time.Second)
 
 	device.listener()
+}
+
+func (*Device) parse(buffer []byte) []byte {
+	length := len(buffer)
+	if length != 14 {
+		return nil
+	}
+
+	header := make([]string, 0, 2)
+	for _, value := range buffer[:2] {
+		header = append(header, fmt.Sprintf("%X", value))
+	}
+	if gstr.Join(header, "") != "FF81" {
+		return nil
+	}
+
+	footer := make([]string, 0, 2)
+	for _, value := range buffer[length-2:] {
+		footer = append(footer, fmt.Sprintf("%X", value))
+	}
+	if gstr.Join(footer, "") != "CC5A" {
+		return nil
+	}
+
+	return buffer[2 : length-2]
 }

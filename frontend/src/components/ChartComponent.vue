@@ -9,26 +9,16 @@ const chart = new Chart({
   height: 400,
 })
 
-const line = chart.data([
-  {x: 0, y: 65},
-  {x: 1, y: 40},
-  {x: 2, y: 95},
-  {x: 3, y: 60},
-  {x: 4, y: 80},
-  {x: 5, y: 55},
-  {x: 6, y: 70},
-  {x: 7, y: 29},
-  {x: 8, y: 40},
-  {x: 9, y: 85},
-]);
+const line = chart.data([])
 
 chart
   .line()
   .encode('x', 'x')
   .encode('y', 'y')
+  .encode('color', 'line')
   .encode('shape', 'smooth')
   .scale('x', { type: 'linear', domain: [0, 9], tickMethod: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] })
-  .scale('y', { type: 'linear', domain: [0, 100], tickMethod: () => [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] })
+  .scale('y', { type: 'linear', domain: [0, 255], tickMethod: () => [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 255] })
   .animate('enter', { type: 'pathIn', duration: 1000 })
 
 onMounted(() => {
