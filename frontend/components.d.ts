@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Chart2Component: typeof import('./src/components/Chart2Component.vue')['default']
     ChartComponent: typeof import('./src/components/ChartComponent.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElCard: typeof import('element-plus/es')['ElCard']

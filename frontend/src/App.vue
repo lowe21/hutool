@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import connection from '@/utils/Websocket'
 import ChartComponent from '@/components/ChartComponent.vue'
+import Chart2Component from '@/components/Chart2Component.vue'
 import ResultComponents from "@/components/ResultComponents.vue"
 
 onMounted(() => {
@@ -16,7 +17,12 @@ onMounted(() => {
     </el-header>
     <el-container>
       <el-main>
-        <chart-component></chart-component>
+        <section>
+          <chart-component></chart-component>
+        </section>
+        <section>
+          <chart2-component></chart2-component>
+        </section>
       </el-main>
       <el-aside>
         <result-components></result-components>
