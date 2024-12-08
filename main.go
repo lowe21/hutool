@@ -15,7 +15,11 @@ import (
 var (
 	//go:embed all:frontend/dist
 	assets embed.FS
-	device = &Device{}
+	device = &Device{
+		VID:      "1A86",
+		PID:      "7523",
+		BaudRate: 115200,
+	}
 	server = &Server{}
 )
 
