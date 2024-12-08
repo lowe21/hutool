@@ -11,15 +11,16 @@ const chart = new Chart({
 
 const line = chart.data([])
 
-chart
-  .line()
+chart.line()
   .encode('x', 'x')
   .encode('y', 'y')
-  .encode('color', 'line')
   .encode('shape', 'smooth')
-  .scale('x', { type: 'linear', domain: [0, 9], tickMethod: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] })
-  .scale('y', { type: 'linear', domain: [0, 255], tickMethod: () => [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 255] })
+  .scale('x', { type: 'linear', domain: [0, 29], tickMethod: () => [5, 10, 15, 20, 25] })
+  .scale('y', { type: 'linear', domain: [0, 10], tickMethod: () => [0, 2.5, 5, 7.5, 10] })
   .animate('enter', { type: 'pathIn', duration: 1000 })
+
+chart.axisX().attr('title', '')
+chart.axisY().attr('title', '')
 
 onMounted(() => {
   const element = document.getElementById('container')
