@@ -76,3 +76,15 @@ server:
   nameToUriType: 3                     # 路由注册中使用对象注册时的路由生成规则。默认为0
   routeOverWrite: false                # 当遇到重复路由注册时是否强制覆盖。默认为false，表示重复路由存在时将会在启动时报错退出
   dumpRouterMap: true                  # 是否在server启动时打印所有的路由列表。默认为true
+
+# DEVICE CONFIG
+device:
+  vid: "1A86"                                                                            # 供应商ID
+  pid: "7523"                                                                            # 产品ID
+  baudRate: 115200                                                                       # 波特率
+  dataInterval: 100                                                                      # 数据间隔，单位：毫秒
+  dataSize: 14                                                                           # 数据大小
+  dataHead: [255, 129]                                                                   # 数据帧头，[FF 81]
+  dataTail: [204, 90]                                                                    # 数据帧尾，[CC 5A]
+  restartInterval: "5s"                                                                  # 重启间隔
+  standbyData: [10.5, 7.8125, 7.8125, 7.1875, 7.875, 7.625, 7.875, 7.875, 7.875, 10.125] # 待机数据
