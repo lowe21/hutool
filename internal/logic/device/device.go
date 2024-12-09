@@ -25,7 +25,7 @@ func init() {
 type deviceLogic struct{}
 
 // Listener 设备监听器
-func (*deviceLogic) Listener(ctx context.Context) (err error) {
+func (device *deviceLogic) Listener(ctx context.Context) (err error) {
 	defer func() {
 		// 异常处理
 		if exception := recover(); exception != nil {
@@ -38,7 +38,7 @@ func (*deviceLogic) Listener(ctx context.Context) (err error) {
 		}
 
 		// 重启监听器
-		gtimer.SetTimeout(context.TODO(), g.Config().MustGet(ctx, "device.restartInterval").Duration(), func(context.Context) {
+		gtimer.SetTimeout(context.TODO(), device.restartInterval(ctx), func(context.Context) {
 			err = service.Device().Listener(ctx)
 		})
 	}()
@@ -54,7 +54,7 @@ func (*deviceLogic) Listener(ctx context.Context) (err error) {
 
 	for _, port := range ports {
 		// 匹配设备VID和PID
-		if port.VID == g.Config().MustGet(ctx, "device.vid").String() && port.PID == g.Config().MustGet(ctx, "device.pid").String() {
+		if port.VID == device.vid(ctx) && port.PID == device.pid(ctx) {
 			portName = port.Name
 			break
 		}
@@ -66,14 +66,14 @@ func (*deviceLogic) Listener(ctx context.Context) (err error) {
 
 	// 打开设备端口
 	port, err := serial.Open(portName, &serial.Mode{
-		BaudRate: g.Config().MustGet(ctx, "device.baudRate").Int(),
+		BaudRate: device.baudRate(ctx),
 	})
 	if err != nil {
 		return
 	}
 
 	// 数据集
-	dataset := make([][]float64, 0, time.Second.Milliseconds()/g.Config().MustGet(ctx, "device.dataInterval").Int64())
+	dataset := make([][]float64, 0, gconv.Int(math.Ceil(gconv.Float64(time.Second.Milliseconds())/gconv.Float64(device.dataInterval(ctx)))))
 
 	for {
 		// 缓冲区
@@ -103,22 +103,22 @@ func (*deviceLogic) Listener(ctx context.Context) (err error) {
 }
 
 // ParseData 解析数据
-func (*deviceLogic) ParseData(ctx context.Context, buffer []byte) (data []float64) {
+func (device *deviceLogic) ParseData(ctx context.Context, buffer []byte) (data []float64) {
 	// 数据大小
-	dataSize := g.Config().MustGet(ctx, "device.dataSize").Int()
+	dataSize := device.dataSize(ctx)
 	if dataSize != len(buffer) {
 		return
 	}
 
 	// 数据帧头
-	dataHead := garray.NewFrom(g.Config().MustGet(ctx, "device.dataHead").Interfaces())
+	dataHead := garray.NewFrom(gconv.Interfaces(device.dataHead(ctx)))
 	bufferHead := garray.NewFrom(gconv.Interfaces(buffer[:dataHead.Len()]))
 	if dataHead.Join(",") != bufferHead.Join(",") {
 		return
 	}
 
 	// 数据帧尾
-	dataTail := garray.NewFrom(g.Config().MustGet(ctx, "device.dataTail").Interfaces())
+	dataTail := garray.NewFrom(gconv.Interfaces(device.dataTail(ctx)))
 	bufferTail := garray.NewFrom(gconv.Interfaces(buffer[dataSize-dataTail.Len():]))
 	if dataTail.Join(",") != bufferTail.Join(",") {
 		return
@@ -195,8 +195,8 @@ func (*deviceLogic) BuildData(ctx context.Context, dataset [][]float64) any {
 }
 
 // IsStandby 是否为待机
-func (*deviceLogic) IsStandby(ctx context.Context, data []float64) bool {
-	standbyData := g.Config().MustGet(ctx, "device.standbyData").Float64s()
+func (device *deviceLogic) IsStandby(ctx context.Context, data []float64) bool {
+	standbyData := device.standbyData(ctx)
 	if len(data) != len(standbyData) {
 		return false
 	}
@@ -210,4 +210,49 @@ func (*deviceLogic) IsStandby(ctx context.Context, data []float64) bool {
 	}
 
 	return true
+}
+
+// vid 供应商ID
+func (*deviceLogic) vid(ctx context.Context) string {
+	return g.Config().MustGet(ctx, "device.vid", "1A86").String()
+}
+
+// pid 产品ID
+func (*deviceLogic) pid(ctx context.Context) string {
+	return g.Config().MustGet(ctx, "device.pid", "7523").String()
+}
+
+// baudRate 波特率
+func (*deviceLogic) baudRate(ctx context.Context) int {
+	return g.Config().MustGet(ctx, "device.baudRate", 115200).Int()
+}
+
+// dataInterval 数据间隔
+func (*deviceLogic) dataInterval(ctx context.Context) int {
+	return g.Config().MustGet(ctx, "device.dataInterval", 100).Int()
+}
+
+// dataSize 数据大小
+func (*deviceLogic) dataSize(ctx context.Context) int {
+	return g.Config().MustGet(ctx, "device.dataSize", 14).Int()
+}
+
+// dataHead 数据帧头
+func (*deviceLogic) dataHead(ctx context.Context) []byte {
+	return g.Config().MustGet(ctx, "device.dataHead", []byte{255, 129}).Bytes()
+}
+
+// dataHead 数据帧尾
+func (*deviceLogic) dataTail(ctx context.Context) []byte {
+	return g.Config().MustGet(ctx, "device.dataTail", []byte{204, 90}).Bytes()
+}
+
+// restartInterval 重启间隔
+func (*deviceLogic) restartInterval(ctx context.Context) time.Duration {
+	return g.Config().MustGet(ctx, "device.restartInterval", "5s").Duration()
+}
+
+// standbyData 待机数据
+func (*deviceLogic) standbyData(ctx context.Context) []float64 {
+	return g.Config().MustGet(ctx, "device.standbyData", []float64{10.5, 7.8125, 7.8125, 7.1875, 7.875, 7.625, 7.875, 7.875, 7.875, 10.125}).Float64s()
 }
