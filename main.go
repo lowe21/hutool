@@ -15,11 +15,7 @@ import (
 var (
 	//go:embed all:frontend/dist
 	assets embed.FS
-	device = &Device{
-		VID:      "1A86",
-		PID:      "7523",
-		BaudRate: 115200,
-	}
+	device = &Device{}
 	server = &Server{}
 )
 
@@ -32,7 +28,7 @@ func main() {
 			Assets: assets,
 		},
 		OnStartup: func(ctx context.Context) {
-			go device.listener()
+			go device.listener(ctx)
 			go server.run()
 		},
 		Bind: []any{
