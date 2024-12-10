@@ -40,30 +40,34 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 		Y    float64 `json:"y"`
 	}
 
-	newData := make([]*Data, 0, (len(data)+2)*2)
-	x := 0
+	newData := make([]*Data, 0, len(data)*2)
+	x := 1
 
 	// 数据头
-	newData = append(newData, &Data{
-		Type: "benchmark",
-		X:    x,
-	})
-	newData = append(newData, &Data{
-		Type: "testing",
-		X:    x,
-	})
+	for index := range data {
+		if index%2 != 0 {
+			newData = append(newData, &Data{
+				Type: "testing",
+				X:    x,
+			})
+			newData = append(newData, &Data{
+				Type: "benchmark",
+				X:    x,
+			})
+			x++
+		}
+	}
 
 	switch {
 	// 是否为待机模式
 	case detector.isStandbyMode(data):
 		for range data {
-			x++
 			newData = append(newData, &Data{
-				Type: "benchmark",
+				Type: "testing",
 				X:    x,
 			})
 			newData = append(newData, &Data{
-				Type: "testing",
+				Type: "benchmark",
 				X:    x,
 			})
 			x++
@@ -71,29 +75,33 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 	default:
 		// TODO
 		for _, value := range data {
-			x++
-			newData = append(newData, &Data{
-				Type: "benchmark",
-				X:    x,
-			})
 			newData = append(newData, &Data{
 				Type: "testing",
 				X:    x,
 				Y:    value,
+			})
+			newData = append(newData, &Data{
+				Type: "benchmark",
+				X:    x,
 			})
 			x++
 		}
 	}
 
 	// 数据尾
-	newData = append(newData, &Data{
-		Type: "benchmark",
-		X:    x,
-	})
-	newData = append(newData, &Data{
-		Type: "testing",
-		X:    x,
-	})
+	for index := range data {
+		if index%2 != 0 {
+			newData = append(newData, &Data{
+				Type: "testing",
+				X:    x,
+			})
+			newData = append(newData, &Data{
+				Type: "benchmark",
+				X:    x,
+			})
+			x++
+		}
+	}
 
 	// 通知数据
 	websocket.Notice(websocket.Message("data", newData))
@@ -116,7 +124,7 @@ func (*detectorLogic) isStandbyMode(data []float64) bool {
 	for index, value := range data {
 		if value != standbyData[index] {
 			// 误差值
-			if math.Abs(value-standbyData[index]) > 0.1 {
+			if math.Abs(value-standbyData[index]) > 0.125 {
 				return false
 			}
 		}
