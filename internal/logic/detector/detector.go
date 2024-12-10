@@ -35,7 +35,7 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 	}
 
 	type Data struct {
-		Name string  `json:"name"`
+		Type string  `json:"type"`
 		X    int     `json:"x"`
 		Y    float64 `json:"y"`
 	}
@@ -45,11 +45,11 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 
 	// 数据头
 	newData = append(newData, &Data{
-		Name: "benchmark",
+		Type: "benchmark",
 		X:    x,
 	})
 	newData = append(newData, &Data{
-		Name: "testing",
+		Type: "testing",
 		X:    x,
 	})
 
@@ -59,11 +59,11 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 		for range data {
 			x++
 			newData = append(newData, &Data{
-				Name: "benchmark",
+				Type: "benchmark",
 				X:    x,
 			})
 			newData = append(newData, &Data{
-				Name: "testing",
+				Type: "testing",
 				X:    x,
 			})
 			x++
@@ -73,11 +73,11 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 		for _, value := range data {
 			x++
 			newData = append(newData, &Data{
-				Name: "benchmark",
+				Type: "benchmark",
 				X:    x,
 			})
 			newData = append(newData, &Data{
-				Name: "testing",
+				Type: "testing",
 				X:    x,
 				Y:    value,
 			})
@@ -87,11 +87,11 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 
 	// 数据尾
 	newData = append(newData, &Data{
-		Name: "benchmark",
+		Type: "benchmark",
 		X:    x,
 	})
 	newData = append(newData, &Data{
-		Name: "testing",
+		Type: "testing",
 		X:    x,
 	})
 

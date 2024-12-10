@@ -15,16 +15,16 @@ const connection = () => {
         if (result.code == 'OK') {
           switch (result.handler) {
             case 'data':
-            {
-              const data: HandlerDataArray = JSON.parse(JSON.stringify(result.data))
-              Emitter.emit('change-data', data)
-            }
+              {
+                const data: HandlerDataArray = JSON.parse(JSON.stringify(result.data))
+                Emitter.emit('change-data', data)
+              }
               break
             case 'result':
-            {
-              const data: HandlerResult = JSON.parse(JSON.stringify(result.data))
-              Emitter.emit('change-result', data)
-            }
+              {
+                const data: HandlerResult = JSON.parse(JSON.stringify(result.data))
+                Emitter.emit('change-result', data)
+              }
               break
           }
         } else {

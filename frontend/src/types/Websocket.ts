@@ -6,7 +6,7 @@ export interface Result {
 }
 
 interface HandlerData {
-  line: string,
+  type: string,
   x: number,
   y: number,
 }
