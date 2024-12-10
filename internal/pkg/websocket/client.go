@@ -16,7 +16,7 @@ import (
 	"hutool/internal/util"
 )
 
-func newClient(config *Config, conn *websocket.Conn, clientId string) (client *Client, err error) {
+func newClient(config *Config, conn *websocket.Conn, clientId string) (client *Client) {
 	// 初始化配置
 	if config == nil {
 		config = &Config{}
@@ -24,14 +24,12 @@ func newClient(config *Config, conn *websocket.Conn, clientId string) (client *C
 	config.Init()
 
 	defer func() {
-		if err == nil {
-			// 监听读消息
-			go client.reader()
-			// 监听写消息
-			go client.writer()
-			// 注册客户端
-			manager.Register(client)
-		}
+		// 监听读消息
+		go client.reader()
+		// 监听写消息
+		go client.writer()
+		// 注册客户端
+		manager.Register(client)
 	}()
 
 	return &Client{
@@ -39,7 +37,7 @@ func newClient(config *Config, conn *websocket.Conn, clientId string) (client *C
 		conn:     conn,
 		clientId: clientId,
 		message:  make(chan []byte),
-	}, nil
+	}
 }
 
 type Client struct {

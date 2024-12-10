@@ -21,16 +21,7 @@ func Connect(request *ghttp.Request) {
 	if err != nil {
 		return
 	}
-	defer func() {
-		if err != nil {
-			_ = conn.WriteMessage(websocket.TextMessage, Message("connect", err))
-			_ = conn.Close()
-		}
-	}()
 
-	client, err := newClient(&Config{}, conn, gctx.CtxId(request.GetCtx()))
-	if err != nil {
-		return
-	}
+	client := newClient(&Config{}, conn, gctx.CtxId(request.GetCtx()))
 	client.Send(Message("connect", "connect succeed"))
 }

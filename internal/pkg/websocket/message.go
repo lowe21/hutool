@@ -10,17 +10,19 @@ import (
 	"hutool/internal/util"
 )
 
-type Input struct {
-	Handler string `json:"handler" valid:"required"` // 处理方法
-	Params  any    `json:"params"  valid:"json"`     // 参数
-}
+type (
+	Input struct {
+		Handler string `json:"handler" valid:"required"` // 处理方法
+		Params  any    `json:"params"  valid:"json"`     // 参数
+	}
 
-type Output struct {
-	Handler string `json:"handler"` // 处理方法
-	Code    string `json:"code"`    // 返回码
-	Message string `json:"message"` // 返回信息
-	Data    any    `json:"data"`    // 返回数据
-}
+	Output struct {
+		Handler string `json:"handler"` // 处理方法
+		Code    string `json:"code"`    // 返回码
+		Message string `json:"message"` // 返回信息
+		Data    any    `json:"data"`    // 返回数据
+	}
+)
 
 // Message 消息
 func Message(handler string, args ...any) []byte {
