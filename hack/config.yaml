@@ -1,4 +1,5 @@
 gfcli:
+  gen:
     service:
       srcFolder: internal/logic       # 源文件的路径
       dstFolder: internal/service     # 目标文件的路径

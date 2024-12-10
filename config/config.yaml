@@ -77,10 +77,10 @@ server:
   routeOverWrite: false                # 当遇到重复路由注册时是否强制覆盖。默认为false，表示重复路由存在时将会在启动时报错退出
   dumpRouterMap: true                  # 是否在server启动时打印所有的路由列表。默认为true
 
-# DEVICE CONFIG
-device:
-  vid: "1A86"                                                                            # 供应商ID
-  pid: "7523"                                                                            # 产品ID
+# DETECTOR CONFIG
+detector:
+  vid: "1A86"                                                                            # 供应商id
+  pid: "7523"                                                                            # 产品id
   baudRate: 115200                                                                       # 波特率
   dataInterval: 100                                                                      # 数据间隔，单位：毫秒
   dataSize: 14                                                                           # 数据大小
