@@ -2,7 +2,6 @@ package detector
 
 import (
 	"context"
-	"fmt"
 	"math"
 	"time"
 
@@ -37,11 +36,7 @@ func (detector *Detector) Listener(ctx context.Context, datasetFunc func(context
 		// 异常处理
 		if exception := recover(); exception != nil {
 			if recoverFunc != nil {
-				if err, ok := exception.(error); ok {
-					recoverFunc(ctx, err)
-				} else {
-					recoverFunc(ctx, util.Error(fmt.Printf("%+v", exception)))
-				}
+				recoverFunc(ctx, util.Error(exception))
 			}
 		}
 
