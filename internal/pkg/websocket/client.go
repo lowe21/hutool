@@ -77,10 +77,8 @@ func (client *Client) Close() {
 
 		// 注销客户端
 		manager.Unregister(client)
-
 		// 关闭消息通道
 		close(client.message)
-
 		// 关闭连接
 		_ = client.conn.Close()
 	})

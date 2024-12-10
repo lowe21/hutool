@@ -3,11 +3,16 @@ package main
 import (
 	"context"
 
+	detector "hutool/internal/pkg/device"
 	"hutool/internal/service"
 )
 
 type Device struct{}
 
 func (*Device) listener(ctx context.Context) {
-	_ = service.Device().Listener(ctx)
+	detector.Listener(ctx, func(ctx context.Context, dataset [][]float64) {
+		service.Detector().AnalyzeData(ctx, dataset)
+	}, func(_ context.Context, err error) {
+		service.Detector().Error(ctx, err)
+	})
 }

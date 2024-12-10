@@ -5,5 +5,5 @@
 package logic
 
 import (
-	_ "hutool/internal/logic/device"
+	_ "hutool/internal/logic/detector"
 )
