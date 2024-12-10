@@ -12,7 +12,7 @@ type Device struct{}
 func (*Device) listener(ctx context.Context) {
 	detector.Listener(ctx, func(ctx context.Context, dataset [][]float64) {
 		service.Detector().AnalyzeData(ctx, dataset)
-	}, func(_ context.Context, err error) {
+	}, func(ctx context.Context, err error) {
 		service.Detector().Error(ctx, err)
 	})
 }
