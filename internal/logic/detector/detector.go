@@ -96,7 +96,7 @@ func (detector *detectorLogic) AnalyzeData(_ context.Context, dataset [][]float6
 	})
 
 	// 通知数据
-	websocket.Notice(websocket.Message("data", "newData"))
+	websocket.Notice(websocket.Message("data", newData))
 }
 
 // Error 错误
